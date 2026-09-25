@@ -1,4 +1,0 @@
-$kind: http-request
-url: "{{base_url}}/categories/5"
-method: DELETE
-order: 4487342406936998

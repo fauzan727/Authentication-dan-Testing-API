@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{base_url}}/products?sort_by=download_count&order=desc"
+method: GET
+queryParams:
+  sort_by: download_count
+  order: desc
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status 401\", () => { \r
+
+      \    pm.response.to.have.status(401); \r
+
+      });"
+    language: text/javascript
+order: 4502654863430900

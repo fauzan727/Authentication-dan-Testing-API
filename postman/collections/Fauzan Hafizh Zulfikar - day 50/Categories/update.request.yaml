@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{base_url}}/categories/5"
+url: "{{base_url}}/categories/6"
 method: PUT
 body:
   type: json
@@ -8,4 +8,4 @@ body:
     \    \"category_name\": \"Pakaian Pria & Anak\"\r
 
     }"
-order: 4483390265875312
+order: 4193038065650159

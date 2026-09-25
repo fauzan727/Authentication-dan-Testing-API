@@ -1,5 +1,0 @@
-$kind: http-request
-name: New Request
-url: "{{base_url}}/products/10"
-method: DELETE
-order: 4496722166025572

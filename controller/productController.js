@@ -3,7 +3,8 @@ import * as ProductModel from '../models/productModel.js';
 export const ProductController = {
   getProducts: async (req, res) => {
     try {
-      const products = await ProductModel.getAllProducts();
+      const filters = req.query;
+      const products = await ProductModel.getAllProducts(filters);
       res.status(200).json({ success: true, message: "Data produk berhasil diambil", data: products });
     } catch (err) {
       res.status(500).json({ success: false, message: "Gagal mengambil data produk", error: err.message });

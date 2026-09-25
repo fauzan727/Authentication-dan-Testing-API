@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{base_url}}/products/10"
+url: "{{base_url}}/products/11"
 method: PUT
 body:
   type: json
@@ -12,4 +12,4 @@ body:
     \  \"stock\": 25\r
 
     }\r\n"
-order: 4474614595519955
+order: 4285983942353984

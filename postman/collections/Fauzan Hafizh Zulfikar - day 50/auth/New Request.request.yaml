@@ -1,0 +1,29 @@
+$kind: http-request
+url: ""
+method: POST
+scripts:
+  - type: beforeRequest
+    code: ""
+    language: text/javascript
+  - type: afterResponse
+    code: "const body = pm.response.json();\r
+
+      \r
+
+      pm.test('Login berhasil', () => {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      pm.environment.set(\r
+
+      \  'token',\r
+
+      \  body.token || body.data?.token\r
+
+      );"
+    language: text/javascript
+order: 1790346583329
