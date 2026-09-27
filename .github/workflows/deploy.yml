@@ -1,5 +1,5 @@
 name: Deploy API
-on: { push: { branches: [lat-deploy] } }
+on: { push: { branches: [main] } }
 jobs:
   test:
     runs-on: ubuntu-latest
