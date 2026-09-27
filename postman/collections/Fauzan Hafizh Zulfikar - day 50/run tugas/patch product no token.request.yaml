@@ -1,0 +1,29 @@
+$kind: http-request
+url: "{{base_url}}/products"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Jaket Denim Klasik\",\r
+
+    \  \"description\": \"Jaket jeans unisex berbahan denim tebal 14oz berkualitas tinggi dengan aksen washed premium yang tidak luntur saat dicuci.\",\r
+
+    \  \"price\": 245000,\r
+
+    \  \"rating\": 4.9,\r
+
+    \  \"category_id\": 6,\r
+
+    \  \"file_path\": \"uploads/products/jaket-denim.jpg\",\r
+
+    \  \"thumbnail\": \"uploads/products/thumbs/jaket-denim.jpg\",\r
+
+    \  \"status\": \"active\"\r
+
+    }\r\n"
+scripts:
+  - type: afterResponse
+    code: ""
+    language: text/javascript
+order: 5000

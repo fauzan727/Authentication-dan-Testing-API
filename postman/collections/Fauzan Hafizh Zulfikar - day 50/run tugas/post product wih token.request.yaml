@@ -1,0 +1,43 @@
+$kind: http-request
+url: "{{base_url}}/products"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Kemeja Flanel Premium\",\r
+
+    \  \"description\": \"Kemeja flanel berkualitas tinggi dengan bahan katun premium yang nyaman dipakai sehari-hari.\",\r
+
+    \  \"price\": 149000,\r
+
+    \  \"rating\": 4.8,\r
+
+    \  \"category_id\": 6,\r
+
+    \  \"file_path\": \"uploads/products/kemeja.jpg\",\r
+
+    \  \"thumbnail\": \"uploads/products/thumbs/kemeja.jpg\",\r
+
+    \  \"status\": \"active\"\r
+
+    }\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: "const responseData = pm.response.json();\r
+
+      \r
+
+      const productArrayOrObject = responseData.data; \r
+
+      const idProduk = productArrayOrObject.id;\r
+
+      \r
+
+      pm.environment.set(\"id_produk_terakhir\", idProduk);"
+    language: text/javascript
+order: 6000

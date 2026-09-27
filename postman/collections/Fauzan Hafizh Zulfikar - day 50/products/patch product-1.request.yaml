@@ -1,0 +1,12 @@
+$kind: http-request
+name: patch product
+url: "{{base_url}}/products/12"
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"price\": 155000\r\n}\r\n\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 6000

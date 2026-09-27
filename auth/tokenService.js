@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import { JWT_EXPIRES_IN, getJwtSecret } from '../config/auth.js';
 
 export function issueToken(userId) {
-  // getJwtSecret(); // Memastikan JWT_SECRET sudah diatur sebelum implementasi token.
-  // throw new Error('Selesaikan LATIHAN B1: issueToken().');
   return jwt.sign(
     { sub: String(userId) },
     getJwtSecret(),

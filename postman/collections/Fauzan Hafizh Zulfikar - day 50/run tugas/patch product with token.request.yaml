@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/products/{{id_produk_terakhir}}"
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"price\": 155000\r\n}\r\n\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: "const responseData = pm.response.json();\r
+
+      const idProduk = responseData.data.id;\r
+
+      pm.environment.set(\"id_produk_terakhir\", idProduk);\r\n"
+    language: text/javascript
+order: 7000

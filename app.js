@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import productRoutes from './routes/productRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api', userRoutes);
+app.use('/api/auth', authRoutes);
 
 // Menyajikan folder frontend statis mentah
 app.use(express.static(fileURLToPath(new URL('../marketplace-frontend/', import.meta.url))));

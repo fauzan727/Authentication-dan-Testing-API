@@ -1,6 +1,16 @@
 $kind: http-request
-url: ""
+name: login akun
+url: "{{base_url}}/auth/login"
 method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"budi33@example.com\",\r
+
+    \  \"password\": \"password123\"\r
+
+    }\r\n"
 scripts:
   - type: beforeRequest
     code: ""
@@ -26,4 +36,4 @@ scripts:
 
       );"
     language: text/javascript
-order: 1790346583329
+order: 1245

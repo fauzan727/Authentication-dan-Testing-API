@@ -5,7 +5,7 @@ export const getAllProducts = async (filters = {}) => {
 
   let query = `
     SELECT 
-      p.product_id, p.product_name, p.price, p.stock, p.rating, p.description, p.thumbnail, p.level, p.duration, p.enrolled_count, p.status,
+      p.product_id, p.product_name, p.price, p.stock, p.rating, p.description, p.thumbnail, p.status,
       c.category_id, c.category_name, 
       u.user_id, u.user_name
     FROM products p
@@ -42,8 +42,7 @@ export const getAllProducts = async (filters = {}) => {
 
   const validSortColumns = {
     'price': 'p.price',
-    'rating': 'p.rating',
-    'download_count': 'p.download_count'
+    'rating': 'p.rating'
   };
 
   const validOrder = ['ASC', 'DESC'];
@@ -57,7 +56,6 @@ export const getAllProducts = async (filters = {}) => {
   const [rows] = await db.query(query, queryParams);
 
   return rows.map(row => {
-    // Logika Klasifikasi Rating
     let ratingClass = "Regular";
     if (row.rating >= 8.5) {
       ratingClass = "Top Rated";
@@ -72,14 +70,11 @@ export const getAllProducts = async (filters = {}) => {
       price: row.price,
       stock: row.stock,
       rating: row.rating,
-      rating_class: ratingClass, // Field tambahan sesuai kode awal Anda
-      thumbnail: row.thumbnail || "course.jpg",
-      level: row.level || "beginner",
-      duration: row.duration || 0,
-      enrolled_count: row.enrolled_count || 0,
-      status: row.status || "published",
+      rating_class: ratingClass,
+      thumbnail: row.thumbnail || "product.jpg",
+      status: row.status || "active",
       category: row.category_id ? { id: row.category_id, name: row.category_name } : null,
-      instructor: row.user_id ? { id: row.user_id, name: row.user_name } : null // Diubah menjadi 'instructor' agar sesuai Contoh Response
+      seller: row.user_id ? { id: row.user_id, name: row.user_name } : null
     };
   });
 };
@@ -87,7 +82,7 @@ export const getAllProducts = async (filters = {}) => {
 export const findProductById = async (id) => {
   const query = `
     SELECT 
-      p.product_id, p.product_name, p.price, p.stock, p.rating, p.description, p.thumbnail, p.level, p.duration, p.enrolled_count, p.status,
+      p.product_id, p.product_name, p.price, p.stock, p.rating, p.description, p.thumbnail, p.status,
       c.category_id, c.category_name, 
       u.user_id, u.user_name
     FROM products p
@@ -115,37 +110,39 @@ export const findProductById = async (id) => {
     price: row.price,
     stock: row.stock,
     rating: row.rating,
-    rating_class: ratingClass, // Menambahkan rating_class yang sebelumnya tertinggal di fungsi findProductById
-    thumbnail: row.thumbnail || "course.jpg",
-    level: row.level || "beginner",
-    duration: row.duration || 0,
-    enrolled_count: row.enrolled_count || 0,
-    status: row.status || "published",
+    rating_class: ratingClass,
+    thumbnail: row.thumbnail || "product.jpg",
+    status: row.status || "active",
     category: row.category_id ? { id: row.category_id, name: row.category_name } : null,
-    instructor: row.user_id ? { id: row.user_id, name: row.user_name } : null // Disamakan menjadi 'instructor'
+    seller: row.user_id ? { id: row.user_id, name: row.user_name } : null
   };
 };
 
 export const createProduct = async (data) => {
   const product_name = data.product_name || data.title;
-  const user_id = data.user_id || data.seller_id || (data.instructor ? data.instructor.id : null);
-  const { price, stock, category_id, description, thumbnail, level, duration, status } = data;
+  const price = data.price || 0;
+  const stock = data.stock || 0;
+  const rating = data.rating || 0;
+  const { category_id, description, thumbnail, status } = data;
 
   const [result] = await db.query(
-    'INSERT INTO products (product_name, price, stock, category_id, user_id, description, thumbnail, level, duration, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [product_name, price, stock, category_id, user_id, description, thumbnail, level, duration, status || 'published']
+    'INSERT INTO products (product_name, price, stock, rating, category_id, description, thumbnail, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [product_name, price, stock, rating, category_id, description, thumbnail, status || 'active']
   );
 
-  return findProductById(result.insertId); // Mengembalikan objek data utuh yang baru dibuat via findProductById agar strukturnya konsisten
+  return findProductById(result.insertId);
 };
 
 export const updateProduct = async (id, data) => {
   const product_name = data.product_name || data.title;
-  const { price, stock, category_id, description, thumbnail, level, duration, status } = data;
+  const price = data.price || 0;
+  const stock = data.stock || 0;
+  const rating = data.rating || 0;
+  const { category_id, description, thumbnail, status } = data;
 
   await db.query(
-    'UPDATE products SET product_name = ?, price = ?, stock = ?, category_id = ?, description = ?, thumbnail = ?, level = ?, duration = ?, status = ? WHERE product_id = ?',
-    [product_name, price, stock, category_id, description, thumbnail, level, duration, status, id]
+    'UPDATE products SET product_name = ?, price = ?, stock = ?, rating = ?, category_id = ?, description = ?, thumbnail = ?, status = ? WHERE product_id = ?',
+    [product_name, price, stock, rating, category_id, description, thumbnail, status, id]
   );
 
   return findProductById(id);

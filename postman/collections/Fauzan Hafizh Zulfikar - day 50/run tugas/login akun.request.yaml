@@ -1,0 +1,38 @@
+$kind: http-request
+url: "{{base_url}}/auth/login"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"budi33@example.com\",\r
+
+    \  \"password\": \"password123\"\r
+
+    }\r\n"
+scripts:
+  - type: beforeRequest
+    code: ""
+    language: text/javascript
+  - type: afterResponse
+    code: "const body = pm.response.json();\r
+
+      \r
+
+      pm.test('Login berhasil', () => {\r
+
+      \  pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      pm.environment.set(\r
+
+      \  'token',\r
+
+      \  body.token || body.data?.token\r
+
+      );"
+    language: text/javascript
+order: 3000

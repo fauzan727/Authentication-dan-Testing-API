@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{base_url}}/products/{{id_produk_terakhir}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: ""
+    language: text/javascript
+  - type: beforeRequest
+    code: "const idAsli = pm.environment.get(\"id_produk_terakhir\");\r
+
+      \r
+
+      pm.environment.set(\"id_produk_terakhir\", idAsli);\r
+
+      \r
+
+      console.log(\"Menjalankan DELETE dengan ID pasti:\", idAsli);\r\n"
+    language: text/javascript
+order: 9000

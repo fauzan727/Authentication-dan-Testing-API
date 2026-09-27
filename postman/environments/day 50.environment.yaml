@@ -3,4 +3,6 @@ values:
   - key: base_url
     value: ''
   - key: token
+    secret: true
+  - key: id_produk_terakhir
     value: ''
