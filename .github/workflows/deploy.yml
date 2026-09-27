@@ -1,0 +1,26 @@
+name: Deploy API
+on: { push: { branches: [main] } }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - { uses: actions/checkout@v7 }
+      - { uses: actions/setup-node@v7, with: { node-version: 24 } }
+      - { run: npm ci }
+      - { run: npm test }
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simpan kunci SSH ke runner
+        run: |
+          install -d -m 700 ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          echo "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key
+      - name: Pull & compose up via OpenSSH
+        run: ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+          "cd ${{ secrets.VPS_PATH }} && git pull && docker compose up --build -d"
+      - name: Tunggu start, cek /health
+        run: ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+          "for i in 1 2 3 4 5 6 7 8 9 10; do curl -fSs localhost:${{ secrets.VPS_PORT }}/health && exit 0; sleep 5; done; exit 1"
