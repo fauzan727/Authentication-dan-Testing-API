@@ -110,7 +110,7 @@
           "response": []
         },
         {
-          "name": "delete",
+          "name": "New Request",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -380,23 +380,12 @@
         },
         {
           "name": "login salah",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const body = pm.response.json();\r\n\r\npm.test('Login berhasil', () => {\r\n  pm.response.to.have.status(200);\r\n});\r\n\r\npm.environment.set(\r\n  'token',\r\n  body.token || body.data?.token\r\n);"
-                ]
-              }
-            }
-          ],
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"email\": \"budi33@example.com\",\r\n  \"password\": \"password123\"\r\n}\r\n",
+              "raw": "{\r\n  \"email\": \"budi33@example.com\",\r\n  \"password\": \"password122\"\r\n}\r\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -472,7 +461,25 @@
           "response": []
         },
         {
-          "name": "patch product no token",
+          "name": "products tidak ada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/50",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "50"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post product no token",
           "request": {
             "method": "POST",
             "header": [],
@@ -593,6 +600,44 @@
           "response": []
         },
         {
+          "name": "patch product with no token (Failed)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\nconst idProduk = responseData.data.id;\r\npm.environment.set(\"id_produk_terakhir\", idProduk);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"price\": 155000\r\n}\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products/{{id_produk_terakhir}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "{{id_produk_terakhir}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "del product with token",
           "event": [
             {
@@ -632,18 +677,39 @@
           "response": []
         },
         {
-          "name": "products tidak ada",
+          "name": "del product with no token (failed)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const idAsli = pm.environment.get(\"id_produk_terakhir\");\r\n\r\npm.environment.set(\"id_produk_terakhir\", idAsli);\r\n\r\nconsole.log(\"Menjalankan DELETE dengan ID pasti:\", idAsli);\r\n"
+                ]
+              }
+            }
+          ],
           "request": {
-            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/products/50",
+              "raw": "{{base_url}}/products/{{id_produk_terakhir}}",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "products",
-                "50"
+                "{{id_produk_terakhir}}"
               ]
             }
           },
